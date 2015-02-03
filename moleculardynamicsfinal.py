@@ -4,13 +4,13 @@ import math
 import mpl_toolkits.mplot3d.axes3d as p3
 Np=864
 m = int((Np/4)**(1.0/3)+0.01) #amount of unit cells per direction
+print m
 sigma=445
 epsilon=5
 print "hello world!"
 
 def fill_init_pos(m, positions):
   print "m: ",m
-  a=(4.0/n)**(1./3)
   #do things
   positions[0]=[0.0,0.0,0.0]
   positions[1]=[0.5,0.5,0.0]
@@ -32,13 +32,13 @@ def fill_init_mom(n,momenta):
   return momenta
 
 class particleClass:
-  def __init__(self, n):
-    self.positions=np.zeros((n,3),dtype=float)
-    self.momenta=np.zeros((n,3),dtype=float)
-    self.forces=np.zeros((n,3),dtype=float)
-    self.positions = fill_init_pos(n, self.positions)
-    self.momenta = fill_init_mom(n, self.momenta)
-    self.forces=sum_forces(self.positions,self.forces,n)
+  def __init__(self, Np,m):
+    self.positions=np.zeros((Np,3),dtype=float)
+    self.momenta=np.zeros((Np,3),dtype=float)
+    self.forces=np.zeros((Np,3),dtype=float)
+    self.positions = fill_init_pos(m, self.positions)
+    self.momenta = fill_init_mom(Np, self.momenta)
+    self.forces=sum_forces(self.positions,self.forces,Np,m,sigma,epsilon)
   def show(self):
     print "Positions: ", self.positions
     print "Momenta: ", self.momenta
@@ -64,11 +64,11 @@ def calc_force(particle1,particle2,m,sigma,epsilon):
   Fz=F*deltaz/r
   return [Fx,Fy,Fz]
 
-def sum_forces(positions,forces,Np):
+def sum_forces(positions,forces,Np,m,sigma,epsilon):
 	for i in xrange(0,Np):
 		for j in xrange(0,Np):
 			if i!=j:
-				forces[i]+=calc_force(positions[i],positions[j]) 
+				forces[i]+=calc_force(positions[i],positions[j],m,sigma,epsilon) 
  	return forces
 
 def plotthings(positions,Np):
@@ -97,9 +97,10 @@ def changepos(deltat,momenta,positions,mass):
 
 
 
-  
+"""
 particles = particleClass(Np)
 particles.show()
 plotthings(particles.positions,Np)
 
 print calc_force(particles.positions[0],particles.positions[1])
+"""

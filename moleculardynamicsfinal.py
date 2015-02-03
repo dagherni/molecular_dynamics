@@ -38,11 +38,11 @@ class particleClass:
     self.forces=np.zeros((n,3),dtype=float)
     self.positions = fill_init_pos(n, self.positions)
     self.momenta = fill_init_mom(n, self.momenta)
-    #self.forces=sum_forces(self.positions,self.forces,n)
+    self.forces=sum_forces(self.positions,self.forces,n)
   def show(self):
     print "Positions: ", self.positions
     print "Momenta: ", self.momenta
-    #print "Forces: ",self.forces
+    print "Forces: ",self.forces
 
 def calc_force(particle1,particle2,m,sigma,epsilon):
   deltax= particle2[0]-particle1[0]

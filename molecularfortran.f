@@ -4,6 +4,29 @@ module moleculardynamics
     public sum_forces
 
 contains
+
+    function fill_init_mom(n,momenta) result (momenta)
+        mean,standdev=0,5
+        momenta(:,0)=np.random.normal(mean,standdev,n)
+        momenta(:,1)=np.random.normal(mean,standdev,n)
+        momenta(:,2)=np.random.normal(mean,standdev,n)
+
+    function fill_init_pos(m, positions) result(positions)
+        positions(0)=(0.0,0.0,0.0)
+        positions(1)=(0.5,0.5,0.0)
+        positions(2)=(0.5,0.0,0.5)
+        positions(3)=(0.0,0.5,0.5)
+        integer :: counter=0
+        DO i (0,m)
+            DO j (0,m)
+                DO k (0,m)
+                    positions(counter:counter+4)=positions(0:4)+(i,j,k)
+                    counter = counter + 4
+                end DO
+            end DO
+        end DO
+    end function
+    
     function def calc_force(particle1,particle2,m,sigma,epsilon) result([Fx,Fy,Fz])
         integer :: deltax= particle2[0]-particle1[0]
         integer :: delx2= (m-deltax)
@@ -37,7 +60,21 @@ contains
            end DO
         end DO
     end function
+    
+    function sum_forces(positions,forces,Np,m,sigma,epsilon) result(forces)
+	Do i (0,Np)
+		DO j (0,Np)
+			if i/=j then
+				forces(i)+= call calc_force(positions(i),positions(j),m,sigma,epsilon) 
+		end DO
+	end Do
+    end function
 
+end module       
+        
+    
+    
+ 
     
     
        	

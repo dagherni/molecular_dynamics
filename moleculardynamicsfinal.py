@@ -95,9 +95,9 @@ def changepos(deltat,momenta,positions,mass, L):
 
 def checkPotential(particle1,particle2,L):
   deltar= particle1-particle2
-  deltar[0]=deltar[0]-round(abs(deltar[0]/L))*L
-  deltar[1]=deltar[1]-round(abs(deltar[1]/L))*L
-  deltar[2]=deltar[2]-round(abs(deltar[2]/L))*L
+  deltar[0]=deltar[0]-round(deltar[0]/L)*L
+  deltar[1]=deltar[1]-round(deltar[1]/L)*L
+  deltar[2]=deltar[2]-round(deltar[2]/L)*L
   r2=np.sum(deltar**2)
   V=4*((1/r2)**6 - (1/r2)**3)
   #print "V: ",V
@@ -108,12 +108,13 @@ def checkpotentialSUM(positions,Np,L):
   for i in xrange(0,Np):
     for j in xrange(0,Np):
       if j!=i:
-        potentialSUM+=checkPotential(positions[i],positions[j], L)
+        potentialSUM+=0.5*checkPotential(positions[i],positions[j], L)
   return potentialSUM
 
 def checkEnergy(Np,momenta,positions,mass,L):
   Etot=np.sum(momenta**2)*0.5
   Etot+=checkpotentialSUM(positions,Np,L)
+#  print 'epot', checkpotentialSUM(positions,Np,L)
 #  for i in xrange(0,Np):
 #    Etot+=sum(0.5*momenta[i]**2/mass)
 #    Etot=Etot+math.sqrt(sum(forces[i]**2))

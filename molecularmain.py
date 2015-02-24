@@ -23,11 +23,11 @@ temp = 0.9
 particles = particleClass(Np, dens, temp,mass)
 particles.changeForces()
 #create empty arrays for energy, momentum, temp etc.
-energies= np.zeros((amountoftimesteps+1,1),dtype = float)
-momenta=np.zeros((amountoftimesteps+1,3),dtype = float)
-Ekin=np.zeros((amountoftimesteps+1,1),dtype = float)
-temperature=np.zeros((amountoftimesteps+1,1),dtype = float)
-pot=np.zeros((amountoftimesteps+1,1),dtype = float)
+energies= np.zeros((timesteps+1,1),dtype = float)
+momenta=np.zeros((timesteps+1,3),dtype = float)
+Ekin=np.zeros((timesteps+1,1),dtype = float)
+temperature=np.zeros((timesteps+1,1),dtype = float)
+pot=np.zeros((timesteps+1,1),dtype = float)
 
 energies[0] = particles.checkEnergy ()
 #momenta[0] =particles.checkMomenta()
@@ -35,9 +35,6 @@ pot[0] =particles.checkPotential()
 Ekin[0]=particles.checkKinEnergy()
 temperature[0]=PQ.calc_Temp(particles)
 
-
-print "Starting Energy: ",checkEnergy (Np,particles.momenta,particles.positions,mass,particles.L)
-print "Starting Momentum: ",checkMomenta(particles.momenta)
 
 for i in range(timesteps):
   #starttime= time.time()
@@ -49,12 +46,12 @@ for i in range(timesteps):
   #momenta[i+1]= particles.checkMomenta()
   Ekin[i+1]=particles.checkKinEnergy()
   pot[i+1]=particles.checkPotential()
-  temperature[i+1]=PQ.calc_Temp(Particles)
+  temperature[i+1]=PQ.calc_Temp(particles)
   #timeremaining= (time.time()-starttime)*(timesteps-i)
   #PRINT "TIME LEFT: ", timeremaining 
 
-t= np.arange(amountoftimesteps+1)
-targetarray=np.ones((amountoftimesteps+1,1),dtype = float)*temp
+t= np.arange(timesteps+1)
+targetarray=np.ones((timesteps+1,1),dtype = float)*temp
 figure()
 title('Simulation of %s particles'%(Np))
 subplot(141)
@@ -77,12 +74,4 @@ show()
 
 
 
-"""
-particles = mo.particleClass(Np,m)
-#for i in range(5):
-mo.particles.momenta=mo.changemom(deltat,mo.particles.momenta,mo.particles.forces)
-mo.particles.positions=mo.changepos(deltat,mo.particles.momenta,mo.particles.positions,mass)
-mo.particles.forces=mo.sum_forces(mo.particles.positions,mo.partilces.forces,Np,m,sigma,epsilon)
-mo.plotthings(mo.particles.positions,Np)
 
-"""

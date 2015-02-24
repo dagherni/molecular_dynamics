@@ -57,36 +57,11 @@ class particleClass:
   def changepos(self,deltat):
     self.positions = (self.positions + self.momenta*(deltat/self.mass)) % self.L
 
-  def checkMomenta(self):
-    momtot=np.sum(self.momenta)
-    print "Total momentum: ",momtot
-
-  def checkPotential(self,particle1,particle2):
-    deltar= particle1-particle2
-    deltar[0]=deltar[0]-round(deltar[0]/self.L)*self.L
-    deltar[1]=deltar[1]-round(deltar[1]/self.L)*self.L
-    deltar[2]=deltar[2]-round(deltar[2]/self.L)*self.L
-    r2=np.sum(deltar**2)
-    V=4*((1/r2)**6 - (1/r2)**3)
-    return V
-  def checkpotentialSUM(self):
-    potentialSUM=0.0
-    for i in xrange(0,self.Np):
-      for j in xrange(0,self.Np):
-        if j!=i:
-          potentialSUM+=0.5*self.checkPotential(self.positions[i],self.positions[j])
-    return potentialSUM
-
-  def checkEnergy(self):
-    Etot=np.sum(self.momenta**2)*0.5/self.mass
-    Etot+=self.checkpotentialSUM()
-    print "Total energy: ",Etot
-  
   def update(self,deltat):
     self.changemom(deltat)
     self.changepos(deltat)
     self.changeForces()
-
+  
   def plotthings(self):
       fig= plt.figure()
       ax = fig.gca(projection='3d')
@@ -96,4 +71,39 @@ class particleClass:
           xs,ys,zs = self.positions[i]
           ax.scatter(xs,ys,zs)
       plt.show()
-    
+   
+
+  def checkMomenta(self):
+    momtot=np.sum(self.momenta,axis=0)
+    print "Total momentum: ",momtot
+
+  def checkPotential(self):
+    totpot=f90pot.calc_pot(self.positions,self.L, [self.Np])
+    return totpot
+
+  def checkKinEnergy(self):
+    Ekin=np.sum(self.momenta**2)*0.5/self.mass
+    return Ekin
+
+  def checkEnergy(self):
+    Etot=self.checkKinEnergy()+self.checkPotential()
+    #print "Total energy: ",Etot
+    return Etot
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

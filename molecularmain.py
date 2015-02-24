@@ -77,10 +77,6 @@ show()
 
 
 
-
-print "End Energy: ",checkEnergy (Np,particles.momenta,particles.positions,mass,particles.L)
-print "End Momentum: ",checkMomenta(particles.momenta)
-
 """
 particles = mo.particleClass(Np,m)
 #for i in range(5):
